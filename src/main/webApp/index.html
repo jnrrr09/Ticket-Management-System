@@ -2,9 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ticketing Management System</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-
+<script>
+    // Entry point: send the visitor to the right place based on whether a
+    // client-side session record exists. The AuthenticationFilter on the
+    // server is the real gatekeeper for every protected page/API call.
+    try {
+        const hasSession = !!sessionStorage.getItem("tms_current_user");
+        window.location.replace(hasSession ? "dashboard.html" : "login.html");
+    } catch (e) {
+        window.location.replace("login.html");
+    }
+</script>
+<noscript>
+    <p>JavaScript is required. <a href="login.html">Continue to login</a>.</p>
+</noscript>
 </body>
 </html>
