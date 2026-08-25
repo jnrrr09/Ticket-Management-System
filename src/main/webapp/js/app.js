@@ -106,26 +106,112 @@ const App = (() => {
     }
 
     /* ---------------------------------------------------------------------
-       Layout: load navbar/sidebar/footer partials, wire up shared chrome
+       Layout: sidebar/navbar/footer markup, generated inline (not fetched).
+
+       Earlier version used $.load("components/sidebar.html") via AJAX. That
+       only works when the app is served over http:// by a real server —
+       opening the files directly (file://) makes the browser silently block
+       that fetch, so the sidebar/navbar never appeared. Since the whole point
+       of this stage is a frontend that works on its own, with zero
+       dependencies (no server, no backend, no database), the shell markup
+       is now built in JS and injected directly — no fetch involved.
+
+       components/sidebar.html, navbar.html, footer.html are kept as the
+       source-of-truth markup/reference (and match the project structure),
+       but are no longer required at runtime.
        --------------------------------------------------------------------- */
+
+    function sidebarMarkup() {
+        return `
+<aside class="app-sidebar" id="appSidebar">
+  <div class="sidebar-brand">
+    <span class="brand-mark">TMS</span>
+    <span class="brand-name">Ticketing</span>
+  </div>
+
+  <nav class="sidebar-nav">
+    <p class="nav-section-label">Workspace</p>
+    <a href="dashboard.html" class="nav-link" data-page="dashboard">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M3 10.5 10 4l7 6.5M5 9v7h4v-4h2v4h4V9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span>Dashboard</span>
+    </a>
+    <a href="tickets.html" class="nav-link" data-page="tickets">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M3 6a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v1.5a1.5 1.5 0 0 0 0 3V12a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-1.5a1.5 1.5 0 0 0 0-3V6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <span>Tickets</span>
+    </a>
+    <a href="tickets.html?new=1" class="nav-link" data-page="new-ticket">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span>New Ticket</span>
+    </a>
+
+    <p class="nav-section-label admin-only">Manage</p>
+    <a href="tickets.html?filter=unassigned" class="nav-link admin-only" data-page="assign">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><circle cx="7.5" cy="7" r="2.6" stroke="currentColor" stroke-width="1.6"/><path d="M2.8 16c.6-2.6 2.4-4 4.7-4s4.1 1.4 4.7 4M13.5 9.5h4M15.5 7.5v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span>Assign Tickets</span>
+    </a>
+    <a href="reports.html" class="nav-link admin-only" data-page="reports">
+      <svg class="nav-icon" viewBox="0 0 20 20" fill="none"><path d="M4 16V9m4 7V4m4 12v-5m4 5V7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span>Reports</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <span class="user-avatar" id="sidebarUserAvatar">?</span>
+      <div class="user-meta">
+        <span class="user-name" id="sidebarUserName">&nbsp;</span>
+        <span class="user-role" id="sidebarUserRole">&nbsp;</span>
+      </div>
+    </div>
+    <button type="button" class="logout-btn" id="logoutBtn" title="Log out">
+      <svg viewBox="0 0 20 20" fill="none"><path d="M8 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3M13 13l4-3-4-3M17 10H8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+</aside>
+<div class="sidebar-scrim" id="sidebarScrim"></div>`;
+    }
+
+    function navbarMarkup() {
+        return `
+<header class="app-navbar">
+  <button type="button" class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle navigation">
+    <svg viewBox="0 0 20 20" fill="none"><path d="M3 5h14M3 10h14M3 15h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+
+  <h1 class="page-title" id="pageTitle">Dashboard</h1>
+
+  <div class="navbar-actions">
+    <div class="user-chip">
+      <span class="user-avatar user-avatar--sm" id="navUserAvatar">?</span>
+      <span class="user-chip-name" id="navUserName">Loading&hellip;</span>
+    </div>
+  </div>
+</header>`;
+    }
+
+    function footerMarkup() {
+        return `
+<footer class="app-footer">
+  <span>Ticketing Management System</span>
+  <span class="footer-dot">&middot;</span>
+  <span>Internal Support Tool</span>
+</footer>`;
+    }
+
     function loadLayout(activePage, pageTitle) {
-        const sidebar = $("#includeSidebar").load("components/sidebar.html", () => {
-            $(`.nav-link[data-page="${activePage}"]`).addClass("active");
-            renderUserChrome();
-            applyRoleVisibility();
-            $("#logoutBtn").on("click", logout);
-        });
+        $("#includeSidebar").html(sidebarMarkup());
+        $("#includeNavbar").html(navbarMarkup());
+        $("#includeFooter").html(footerMarkup());
 
-        $("#includeNavbar").load("components/navbar.html", () => {
-            if (pageTitle) $("#pageTitle").text(pageTitle);
-            renderUserChrome();
-            $("#sidebarToggle").on("click", toggleSidebar);
-        });
+        $(`.nav-link[data-page="${activePage}"]`).addClass("active");
+        if (pageTitle) $("#pageTitle").text(pageTitle);
 
-        $("#includeFooter").load("components/footer.html");
+        renderUserChrome();
+        applyRoleVisibility();
 
+        $("#logoutBtn").on("click", logout);
+        $("#sidebarToggle").on("click", toggleSidebar);
         $("#sidebarScrim").on("click", closeSidebar);
-        return sidebar;
     }
 
     function toggleSidebar() {

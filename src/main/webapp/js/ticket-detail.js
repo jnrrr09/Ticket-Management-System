@@ -25,7 +25,7 @@ let currentTicketId = null;
 
 $(function () {
     App.requireAuth();
-    const layoutDeferred = App.loadLayout("tickets", "Ticket Detail");
+    App.loadLayout("tickets", "Ticket Detail");
 
     const params = new URLSearchParams(window.location.search);
     currentTicketId = params.get("id");

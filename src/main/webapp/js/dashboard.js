@@ -23,9 +23,7 @@ const SAMPLE_DASHBOARD = {
 $(function () {
     App.requireAuth();
     App.loadLayout("dashboard", "Dashboard");
-
-    // Wait a tick for layout (and thus role info) to load before rendering.
-    setTimeout(renderDashboard, 60);
+    renderDashboard();
 });
 
 function renderDashboard() {
