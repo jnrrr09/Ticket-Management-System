@@ -1,4 +1,4 @@
-package tms.model;
+package com.tms.model;
 
 /** Matches the {userName, text, createdAt} shape ticket-detail.js reads
  *  when merging comments into the timeline in renderTimeline(). */

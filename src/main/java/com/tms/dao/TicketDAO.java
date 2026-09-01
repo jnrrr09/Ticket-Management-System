@@ -1,4 +1,4 @@
-package tms.dao;
+package com.tms.dao;
 
 import com.tms.model.Ticket;
 import com.tms.util.DBUtil;

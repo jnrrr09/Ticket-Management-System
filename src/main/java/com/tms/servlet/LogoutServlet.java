@@ -1,4 +1,4 @@
-package tms.servlet;
+package com.tms.servlet;
 
 import com.tms.util.JsonUtil;
 import jakarta.servlet.annotation.WebServlet;

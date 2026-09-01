@@ -1,4 +1,4 @@
-package tms.util;
+package com.tms.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

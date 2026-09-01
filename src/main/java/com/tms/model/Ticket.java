@@ -1,4 +1,4 @@
-package tms.model;
+package com.tms.model;
 
 import java.sql.Timestamp;
 import java.util.List;

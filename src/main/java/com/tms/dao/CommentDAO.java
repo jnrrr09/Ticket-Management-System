@@ -1,4 +1,4 @@
-package tms.dao;
+package com.tms.dao;
 
 import com.tms.model.Comment;
 import com.tms.model.Ticket;

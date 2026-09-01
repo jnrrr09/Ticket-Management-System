@@ -1,4 +1,4 @@
-package tms.servlet;
+package com.tms.servlet;
 
 import com.tms.dao.DashboardDAO;
 import com.tms.model.User;

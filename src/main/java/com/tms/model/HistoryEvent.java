@@ -1,4 +1,4 @@
-package tms.model;
+package com.tms.model;
 
 /** Matches the {type, at, text} shape ticket-detail.js reads in renderTimeline(). */
 public class HistoryEvent {
