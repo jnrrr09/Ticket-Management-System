@@ -195,6 +195,8 @@ const App = (() => {
   <span>Ticketing Management System</span>
   <span class="footer-dot">&middot;</span>
   <span>Internal Support Tool</span>
+   <span class="footer-dot">&middot;</span>
+  <span>Norbus Technology</span>
 </footer>`;
     }
 
@@ -268,9 +270,9 @@ const App = (() => {
     function showDemoBanner(container) {
         if ($("#" + DEMO_MODE_BANNER_ID).length) return;
         const banner = $(`
-      <div id="${DEMO_MODE_BANNER_ID}" class="alert alert-warning" role="status">
-        <span>Showing sample data &mdash; the backend API isn't reachable yet, so this view is populated with placeholder tickets for preview purposes.</span>
-      </div>
+      <!-- <div id="${DEMO_MODE_BANNER_ID}" class="alert alert-warning" role="status">
+       <span>Showing sample data &mdash; the backend API isn't reachable yet, so this view is populated with placeholder tickets for preview purposes.</span>
+   </div>-->
     `);
         $(container).prepend(banner);
     }

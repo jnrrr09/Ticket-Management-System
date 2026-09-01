@@ -46,4 +46,8 @@
             <version>0.4</version>
         </dependency>
     </dependencies>
+    <build>
+    <finalName>ticket-system</finalName>
+    </build>
+
 </project>
