@@ -1,4 +1,4 @@
-package tms.util;
+package com.tms.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -27,7 +27,7 @@ public final class DBUtil {
     private static final String USER =
             System.getenv().getOrDefault("TMS_DB_USER", "root");
     private static final String PASS =
-            System.getenv().getOrDefault("TMS_DB_PASS", "");
+            System.getenv().getOrDefault("TMS_DB_PASS", "Focused@1234");
 
     static {
         try {
